@@ -1,1 +1,19 @@
-Тут что-нибудь появится, честно.
+\documentclass[oneside,final,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russianb]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{sidecap}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{color}
+\DeclareMathOperator*\lowlim{\underline{lim}}
+\DeclareMathOperator*\uplim{\overline{lim}}
+\begin{document}
+\noindent\textbf{\Large{Введение}}\newline\break
+В данном проекте будет рассматриваться следущая задача оптимизации:\newline
+\centerline{$\min\limits_{x} f(x) := \mathbb{E}[F(x, \xi)]$}\newline
+при условии $x\in X$, $X$ -- замкнутое выпуклое подмножество $\mathbb{R}^n$, $F(x, \xi)\ :\ X \to \mathbb{R}$ -- функция из класса $C^1(X)$, $\xi$ -- случайная величина.\newline
+\end{document}
