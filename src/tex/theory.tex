@@ -12,8 +12,11 @@
 \DeclareMathOperator*\lowlim{\underline{lim}}
 \DeclareMathOperator*\uplim{\overline{lim}}
 \begin{document}
-\noindent\textbf{\Large{Введение}}\newline\break
+\noindent\textbf{\Large{Постановка задачи}}\newline\break
 В данном проекте будет рассматриваться следущая задача оптимизации:\newline
 \centerline{$\min\limits_{x} f(x) := \mathbb{E}[F(x, \xi)]$}\newline
 при условии $x\in X$, $X$ -- замкнутое выпуклое подмножество $\mathbb{R}^n$, $F(x, \xi)\ :\ X \to \mathbb{R}$ -- функция из класса $C^1(X)$, $\xi$ -- случайная величина.\newline
+\break\noindent\textbf{\Large{Метод SGD}}\newline\break
+Метод стохастического градиента получается из классического метода градиентого спуска заменой градиента $\nabla f(x)$ на стохастический
+градиент $G(x, \xi) = \partial_x F(x, \xi)$. Если функция $f$ является $L$ -- гладкой и $\exists\sigma > 0\ \mathbb{E}\|G(x, \xi) - \mathbb{E}[G(x, \xi)]\|^2_{*} \le \sigma^2$, то оптимальная скорость сходимости принадлежит $\mathcal{O}(\frac{L}{k^2} + \frac{\sigma}{\sqrt{k}})$. Исследуемый в данном проекте алгоритм достигает указанной оптимальной скорости сходимости.
 \end{document}
