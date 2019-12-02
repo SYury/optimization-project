@@ -11,5 +11,5 @@ clean_theory :
 	rm -f theory.{aux,log}
 
 test :
-	echo "No tests available"
+	python3 src/py/test.py
 
