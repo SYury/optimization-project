@@ -12,28 +12,28 @@ class LinearRegression(torch.nn.Module):
         super(LinearRegression, self).__init__()
         self.linear = torch.nn.Linear(1, 1)
     def forward(self, x):
-        y_pred = self.linear(x)
-        return y_pred
+        return self.linear(x)
 
 class RegressionTest:
     def __init__(self, name, model, create_opt, criterion, x, y):
         self.name = name
         self.model = model
-        self.opt = create_opt(self.model)
+        self.opt = create_opt(model)
         self.criterion = criterion
         self.x = x
         self.y = y
         self.errors = []
     
-    def epoch(self):
+    def run(self, n_epochs):
         x_v = Variable(torch.from_numpy(self.x))
         y_v = Variable(torch.from_numpy(self.y))
-        self.opt.zero_grad()
-        y_pred = self.model(x_v)
-        loss = self.criterion(y_v, y_pred)
-        self.errors.append(loss)
-        loss.backward()
-        self.opt.step(lambda : 0)
+        for i in range(n_epochs):
+            self.opt.zero_grad()
+            y_pred = self.model(x_v)
+            loss = self.criterion(y_pred, y_v)
+            loss.backward()
+            self.opt.step(lambda : 0)
+            self.errors.append(loss.data.item())
     
     def output(self, epochs):
         s = self.name + ' '
@@ -47,9 +47,9 @@ def test_linreg():
     x_values = []
     y_values = []
     
-    for i in range(20):
+    for i in range(5):
         x_values.append(i)
-        y_values.append(5*i + 2 + torch.randn(1)[0])
+        y_values.append(5*i + 2 + torch.randn(1).data.item())
     
     x_data = np.array(x_values, dtype=np.float32).reshape(-1, 1)
     y_data = np.array(y_values, dtype=np.float32).reshape(-1, 1)
@@ -64,8 +64,7 @@ def test_linreg():
         ]
     
     for i in range(len(test)):
-        for n in range(52):
-            test[i].epoch()
+            test[i].run(52)
     
     points = [10, 20, 30, 40, 50]
     header = "method   "
@@ -90,9 +89,9 @@ def test_logreg():
     x_values = []
     y_values = []
     
-    for i in range(20):
+    for i in range(5):
         x_values.append(i)
-        y_values.append(5*i + 2 + torch.randn(1)[0])
+        y_values.append(5*i + 2 + torch.randn(1).data.item())
     
     x_data = np.array(x_values, dtype=np.float32).reshape(-1, 1)
     y_data = np.array(y_values, dtype=np.float32).reshape(-1, 1)
@@ -107,8 +106,7 @@ def test_logreg():
         ]
     
     for i in range(len(test)):
-        for n in range(52):
-            test[i].epoch()
+            test[i].run(52)
     
     points = [10, 20, 30, 40, 50]
     header = "method   "
@@ -118,6 +116,7 @@ def test_logreg():
     for i in range(len(test)):
         test[i].output(points)
     print('')
+
 
 def main():
     test_linreg()
