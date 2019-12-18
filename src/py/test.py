@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import torch
 from torch.autograd import Variable
 from torch.nn import functional as F
@@ -63,8 +64,15 @@ def test_linreg():
         RegressionTest('LBFGS', LinearRegression(), lambda model : LBFGS(model.parameters()), torch.nn.MSELoss(), x_data, y_data)
         ]
     
+    plt.figure(figsize=(14, 8))
     for i in range(len(test)):
-            test[i].run(52)
+        test[i].run(52)
+        plt.plot(np.arange(1, 53), test[i].errors, label=test[i].name)
+    plt.legend(fontsize=12, loc=1)
+    plt.title('Linear regression')
+    plt.xlabel('Epoch')
+    plt.ylabel('MSE')
+    plt.savefig('linear.png')
     
     points = [10, 20, 30, 40, 50]
     header = "method   "
@@ -105,8 +113,15 @@ def test_logreg():
         RegressionTest('LBFGS', LogisticRegression(), lambda model : LBFGS(model.parameters()), torch.nn.MSELoss(), x_data, y_data)
         ]
     
+    plt.figure(figsize=(14, 8))
     for i in range(len(test)):
-            test[i].run(52)
+        test[i].run(52)
+        plt.plot(np.arange(1, 53), test[i].errors, label=test[i].name)
+    plt.legend(fontsize=12, loc=1)
+    plt.title('Logistic regression')
+    plt.xlabel('Epoch')
+    plt.ylabel('MSE')
+    plt.savefig('logistic.png')
     
     points = [10, 20, 30, 40, 50]
     header = "method   "
