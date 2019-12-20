@@ -1,5 +1,5 @@
 import torch
-import math
+import numpy as np
 from torch.optim.optimizer import Optimizer
 
 class A2Grad(Optimizer):
@@ -30,9 +30,9 @@ class A2Grad(Optimizer):
                 state = self.state[p]
                 state['step'] = -1
                 state['yk'] = torch.full_like(p.data, 0)
-                state['vk'] = 0
+                state['vk'] = torch.full_like(p.data, 0)
                 if group['avg'] == 'exp':
-                    state['vk0'] = 0
+                    state['vk0'] = torch.full_like(p.data, 0)
                 state['sum'] = torch.full_like(p.data, 0)
     
     def share_memory(self):
@@ -56,11 +56,11 @@ class A2Grad(Optimizer):
 
                 
                 if p.grad.data.is_sparse:
-                    raise RuntimeError("A2Grad is not compatible with sparse gradients") # потом разберусь
+                    raise RuntimeError("A2Grad is not compatible with sparse gradients")
                     
                 alpha = 2/(state['step'] + 2)
                 alpha_nxt = 2/(state['step'] + 3)
-                delta = torch.dist(grad - state['sum']/(1 + state['step']), torch.full_like(state['sum'], 0))**2
+                delta = np.square(grad - state['sum']/(1 + state['step']))
                 if group['avg'] == 'uni':
                     state['vk'] = state['vk'] + delta
                 elif group['avg'] == 'inc':
@@ -71,15 +71,15 @@ class A2Grad(Optimizer):
                         state['vk0'] = delta
                     else:
                         state['vk0'] = 0.5 * delta + 0.5 * state['vk0']
-                    state['vk'] = max(state['vk'], state['vk0'])
-                hk = 0
+                    state['vk'] = np.maximum(state['vk'], state['vk0'])
+                hk = torch.full_like(state['vk'], 0)
                 if group['avg'] == 'exp':
-                    hk = math.sqrt((state['step'] + 1) * state['vk'])
+                    hk = np.sqrt((state['step'] + 1) * state['vk'])
                 else:
-                    hk = math.sqrt(state['vk'])
+                    hk = np.sqrt(state['vk'])
                 denominator = 2*group['L']/(1 + state['step']) + hk * group['lr'] + group['eps']
-                xk = p.data - (1/denominator)*grad
-                yk = (1 - alpha_nxt)*state['yk'] + alpha_nxt * xk - ((1 - alpha_nxt) * alpha)/denominator * grad
+                xk = p.data - np.multiply(1/denominator, grad)
+                yk = (1 - alpha_nxt)*state['yk'] + alpha_nxt * xk - np.multiply(((1 - alpha_nxt) * alpha)/denominator, grad)
                 p.data = xk
                 state['yk'] = yk
                 state['sum'] += grad
