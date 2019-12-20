@@ -45,7 +45,7 @@
 \end{algorithm}
 \newline
 \break\noindent\textbf{\Large{Adaptive ASGD}}\newline\break
-Определение: $D_\phi(x, y) := \phi(x) - \phi(y) - \langle \triangledownF \phi(y), x - y\rangle$, где $\phi$ ~--- выпуклая гладкая функция.\newline
+Определение: $D_\phi(x, y) := \phi(x) - \phi(y) - \langle \triangledown \phi(y), x - y\rangle$, где $\phi$ ~--- выпуклая гладкая функция.\newline
 Для удобства положим $D(x, y) = D_\psi(x, y)$, где $\psi(x) = \frac{1}{2}\|x\|^2.$\newline\newline
 Общий вид рассматриваемого в статье метода выглядит так:\newline
 \begin{algorithm}[H]
@@ -76,7 +76,7 @@
     \rho\widetilde{v_{k-1}} + (1 - \rho)\delta_k^2,& \text{иначе}
     \end{cases}$\newline
     $v_k = max(v_{k - 1}, \widetilde{v_k})$\newline
-    $h_k = \sqrt{(k + 1)h_k}$
+    $h_k = \sqrt{(k + 1)v_k}$
 \end{itemize}
 Здесь $\delta_k = \underline{G_k} - \frac{1}{k+1}\sum\limits_{i=0}^k\underline{G_i}$.\newline
 \break\noindent\textbf{\Large{Сходимость}}\newline
@@ -105,7 +105,7 @@ $$+\sum_{k = 0}K \lambda_k \left[
 $$, где $\delta_k = \underline{G}_k - \nabla f(x_k)$ и $R_k = \beta_k D_{\phi_k}(x_k, x) - \beta_k D_{\phi_k}(x_{k + 1}, x)$
 \newline
 \textbf{Теорема.}
-Пусть $x^*$ ~--- глобальный минимум, причем $\exists B > 0\ \|x_k - x^*\|^2_\infty < B$. Пусть в схеме exponential moving average $\rho\in(0, 1)$, и распределение ошибки $\delta_k$ таково, что $\exists\sigma \ge 0\ \forall t > 0\ \mathbb{E}e^{t\delta_k}\le e^{t^2\sigma^2/2}$. Тогда $$\mathbb{E}[f(\overline{x_{K+1}}) - f(x^*)] \le \frac{2L\|x^* - x_0\|2}{(K + 1)(K + 2)} + 2\beta B\frac{\sqrt{2\log(2(K + 1))}\sigma}{\sqrt{K + 2}} + \frac{\sqrt{2\varpi}d\sigma}{2\beta(1 - \rho)\sqrt{K + 2}}$$.\newline
+Пусть $x^*$ ~--- глобальный минимум, причем $\exists B > 0\ \|x_k - x^*\|^2_\infty < B$. Пусть в схеме exponential moving average $\rho\in(0, 1)$, и распределение ошибки $\delta_k$ таково, что $\exists\sigma \ge 0\ \forall t > 0\ \mathbb{E}e^{t\delta_k}\le e^{t^2\sigma^2/2}$. Тогда $$\mathbb{E}[f(\overline{x_{K+1}}) - f(x^*)] \le \frac{2L\|x^* - x_0\|2}{(K + 1)(K + 2)} + 2\beta B\frac{\sqrt{2\log(2(K + 1))}\sigma}{\sqrt{K + 2}} + \frac{\sqrt{2\pi}d\sigma}{2\beta(1 - \rho)\sqrt{K + 2}}$$.\newline
 \break\noindent\textbf{\Large{Анализ литературы}}\newline\break
 В ходе анализа литературы было получено, что описанный в статье метод является state-of-the-art среди стохастических градиентных методов.\newline
 \break\noindent\textbf{\Large{Эмпирические результаты}}\newline\break
